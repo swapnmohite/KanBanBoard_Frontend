@@ -1,16 +1,14 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+// /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+      colors: {
+        mainBackgroundColor: "#0D1117",
+        columnBackgroundColor: "#161C22",
       },
     },
   },
   plugins: [],
-}
-
+};
