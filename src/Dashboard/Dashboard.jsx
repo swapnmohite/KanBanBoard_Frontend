@@ -42,7 +42,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="h-screen bg-gradient-to-tr from-indigo-600 via-teal-900 to-[#351555] ">
+      <div className="h-screen bg-zinc-900 ">
         <div className="w-full max-w-5xl px-4 py-28 mx-auto space-y-8 ">
           <main className="grid min-h-0 items-center justify-center gap-4 px-4 text-center md:gap-10 lg:px-6 xl:gap-16">
             <div className="space-y-4">
@@ -65,21 +65,14 @@ const Dashboard = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="rounded-lg bg-gray-100 p-4 space-y-4 ">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4  ">
+            <div className="rounded-lg bg-zinc-800 p-4 space-y-4 ">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg font-semibold">To Do</h2>
-                <div className="flex space-x-1">
-                  <span className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-xs">
-                    Tag1
-                  </span>
-                  <span className="bg-green-200 text-green-800 px-2 py-1 rounded-full text-xs">
-                    Tag2
-                  </span>
-                </div>
+                <div className="flex space-x-1"></div>
               </div>
               <div className="grid gap-4">
-                <div className="relative group rounded-lg bg-white border p-4 cursor-move ">
+                <div className="relative group rounded-lg bg-zinc-700 border p-4 cursor-move ">
                   <button
                     type="button"
                     aria-haspopup="dialog"
@@ -91,14 +84,11 @@ const Dashboard = () => {
                     <div className="text-sm font-semibold">
                       Research competitors
                     </div>
-                    <div className="text-sm text-gray-500 underline ">
-                      Add due date
-                    </div>
                   </button>
                   <div></div>
                   <div className="absolute inset-0 hidden items-center justify-center group-hover:flex"></div>
                 </div>
-                <div className="relative group rounded-lg bg-white border p-4 cursor-move ">
+                <div className="relative group rounded-lg bg-zinc-700 border p-4 cursor-move ">
                   <button
                     type="button"
                     aria-haspopup="dialog"
@@ -108,21 +98,18 @@ const Dashboard = () => {
                     as="div"
                   >
                     <div className="text-sm font-semibold">Write proposal</div>
-                    <div className="text-sm text-gray-500 underline ">
-                      Add due date
-                    </div>
                   </button>
                   <div></div>
                   <div className="absolute inset-0 hidden items-center justify-center group-hover:flex"></div>
                 </div>
               </div>
             </div>
-            <div className="rounded-lg bg-gray-100 p-4 space-y-4 ">
+            <div className="rounded-lg bg-zinc-800 p-4 space-y-4 ">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg font-semibold">In Progress</h2>
               </div>
               <div className="grid gap-4">
-                <div className="relative group rounded-lg bg-white border p-4 cursor-move ">
+                <div className="relative group rounded-lg bg-zinc-700 border p-4 cursor-move ">
                   <button
                     type="button"
                     aria-haspopup="dialog"
@@ -132,21 +119,18 @@ const Dashboard = () => {
                     as="div"
                   >
                     <div className="text-sm font-semibold">Wireframe app</div>
-                    <div className="text-sm text-gray-500 underline ">
-                      Add due date
-                    </div>
                   </button>
                   <div></div>
                   <div className="absolute inset-0 hidden items-center justify-center group-hover:flex"></div>
                 </div>
               </div>
             </div>
-            <div className="rounded-lg bg-gray-100 p-4 space-y-4 ">
+            <div className="rounded-lg bg-zinc-800 p-4 space-y-4 ">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg font-semibold">Done</h2>
               </div>
               <div className="grid gap-4">
-                <div className="relative group rounded-lg bg-white border p-4 cursor-move ">
+                <div className="relative group rounded-lg bg-zinc-700 border p-4 cursor-move ">
                   <button
                     type="button"
                     aria-haspopup="dialog"
@@ -160,9 +144,6 @@ const Dashboard = () => {
                     "
                     >
                       Design logo
-                    </div>
-                    <div className="text-sm text-gray-500 underline ">
-                      Add due date
                     </div>
                   </button>
                   <div></div>
