@@ -19,7 +19,7 @@ const useStore = create((set, get) => ({
             set({ isLoading: true });
 
             const columnsResponse = await api.get(`/api/column/${boardId}`);
-            console.log("columnsResponse:", columnsResponse);
+            // console.log("columnsResponse:", columnsResponse);
             set({ columns: columnsResponse.data });
 
             const allTaskPromises = columnsResponse.data.map((col) =>
@@ -27,12 +27,12 @@ const useStore = create((set, get) => ({
             );
 
             const allTasksResponses = await Promise.all(allTaskPromises);
-            console.log("allTasksResponses:", allTasksResponses);
+            // console.log("allTasksResponses:", allTasksResponses);
 
             const allTasks = allTasksResponses
                 .map((response) => response.data)
                 .flat();
-            console.log("allTasks:", allTasks);
+            // console.log("allTasks:", allTasks);
 
             set({ tasks: allTasks, isLoading: false });
         } catch (error) {

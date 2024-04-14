@@ -6,7 +6,6 @@ import {
     useSensor,
     useSensors,
 } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import ColumnContainer from "./ColumnContainer";
 import useStore from "../store";
@@ -23,7 +22,8 @@ function KanbanBoard() {
     const [editBoardId, setEditBoardId] = useState(null);
     const [editBoardName, setEditBoardName] = useState("");
     const [newColumnName, setNewColumnName] = useState("");
-
+    const [hoveredColumnId, setHoveredColumnId] = useState(null);
+    const [showNewColumnInput, setShowNewColumnInput] = useState(false);
     const {
         boards,
         columns,
@@ -43,13 +43,19 @@ function KanbanBoard() {
 
     useEffect(() => {
         fetchBoards();
-    }, []);
+    }, [fetchBoards]);
+
+    useEffect(() => {
+        if (boards.length > 0 && !activeBoardId) {
+            setActiveBoard(boards[0].id);
+        }
+    }, [boards, activeBoardId, setActiveBoard, fetchColumnsAndTasks]);
 
     useEffect(() => {
         if (activeBoardId) {
             fetchColumnsAndTasks(activeBoardId);
         }
-    }, [activeBoardId]);
+    }, [activeBoardId, fetchColumnsAndTasks]);
 
     const handleAddBoard = async (event) => {
         event.preventDefault();
@@ -119,10 +125,21 @@ function KanbanBoard() {
             updatedTasks[activeTaskIndex] = updatedTask;
             setActiveTask(updatedTask);
         }
+        if (activeBoardId) {
+            fetchColumnsAndTasks(activeBoardId);
+        }
     }
 
-    function onDragOver(event) {
-    }
+    const onDragOver = (event) => {
+        const { over } = event;
+        if (over && over.data.current?.type === 'Column') {
+            setHoveredColumnId(over.id);
+        } else {
+            setHoveredColumnId(null);
+        }
+    };
+
+
     return (
         <div className="flex">
             {/* Sidebar */}
@@ -204,7 +221,7 @@ function KanbanBoard() {
                         sensors={sensors}
                         onDragStart={onDragStart}
                         onDragEnd={onDragEnd}
-                    // onDragOver={onDragOver}
+                        onDragOver={onDragOver}
                     >
                         <div className="m-auto flex gap-4">
                             <div className="flex gap-4">
@@ -221,30 +238,50 @@ function KanbanBoard() {
                                             updateTask={updateTask}
                                         />
                                     ))}
+                                {columns.length < 3 && (
+                                    <>
+                                        {!showNewColumnInput ? (
+                                            <button
+                                                onClick={() => setShowNewColumnInput(true)}
+                                                className="h-[60px] w-[350px] min-w-[350px] cursor-pointer rounded-lg bg-mainBackgroundColor border-2 border-columnBackgroundColor p-4 ring-rose-500 hover:ring-2 flex gap-2 items-center justify-center"
+                                            >
+                                                <PlusIcon />
+                                                Add Column
+                                            </button>
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                value={newColumnName}
+                                                onChange={(e) => setNewColumnName(e.target.value)}
+                                                placeholder="Enter column name"
+                                                className="h-[60px] w-[350px] min-w-[350px] rounded-lg bg-mainBackgroundColor border-2 border-columnBackgroundColor p-4 ring-rose-500 focus:ring-2 outline-none"
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && newColumnName.trim() !== '') {
+                                                        createColumn(activeBoardId, { name: newColumnName });
+                                                        setNewColumnName('');
+                                                        setShowNewColumnInput(false);
+                                                    } else if (e.key === 'Escape') {
+                                                        setNewColumnName('');
+                                                        setShowNewColumnInput(false);
+                                                    }
+                                                }}
+                                                autoFocus
+                                            />
+                                        )}
+                                    </>
+                                )
 
-                                <input
-                                    type="text"
-                                    value={newColumnName}
-                                    onChange={(e) =>
-                                        setNewColumnName(e.target.value)
-                                    }
-                                    placeholder="Enter column name"
-                                    className="h-[60px] w-[350px] min-w-[350px] cursor-pointer rounded-lg bg-mainBackgroundColor border-2 border-columnBackgroundColor p-4 ring-rose-500 hover:ring-2 flex gap-2"
-                                />
-                                <button
-                                    onClick={() =>
-                                        createColumn(activeBoardId, {
-                                            name: newColumnName,
-                                        })
-                                    }
-                                    className="h-[60px] w-[350px] min-w-[350px] cursor-pointer rounded-lg bg-mainBackgroundColor border-2 border-columnBackgroundColor p-4 ring-rose-500 hover:ring-2 flex gap-2 ">
-                                    <PlusIcon />
-                                    Add Column
-                                </button>
+                                }
+
                             </div>
                         </div>
                         {createPortal(
                             <DragOverlay>
+                                {hoveredColumnId && (
+                                    <div className="bg-rose-500 bg-opacity-50 rounded p-4">
+                                        Drop here to move to {columns.find((col) => col.id === hoveredColumnId)?.name || 'Unknown Column'}
+                                    </div>
+                                )}
                                 {activeTask && (
                                     <TaskCard
                                         task={activeTask}

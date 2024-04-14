@@ -14,6 +14,10 @@ function ColumnContainer({ column }) {
     const [showNewTaskInput, setShowNewTaskInput] = useState(false);
 
     const { tasks, createTask, updateColumn, deleteColumn } = useStore();
+    const [isHovered, setIsHovered] = useState(false);
+    const [editingColumnId, setEditingColumnId] = useState(null);
+    const [editingColumnName, setEditingColumnName] = useState(column.name);
+
 
     const tasksIds = useMemo(
         () => tasks.filter((task) => task.columnId === column.id).map((task) => task.id),
@@ -26,7 +30,9 @@ function ColumnContainer({ column }) {
         listeners,
         transform,
         transition,
-
+        isDragging,
+        over,
+        overId,
     } = useSortable({
         id: column.id,
         data: {
@@ -43,40 +49,54 @@ function ColumnContainer({ column }) {
         }
     };
 
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        setIsHovered(event.overId === column.id);
+    };
+
     const style = {
         transition,
         transform: CSS.Transform.toString(transform),
+        opacity: isDragging ? 0.5 : 1,
+        backgroundColor: isHovered ? 'rgba(245, 101, 101, 0.3)' : '',
+        border: isHovered ? '2px dashed #f56565' : '',
+    };
+    const updateColumnName = () => {
+        if (editingColumnName.trim() !== '') {
+            updateColumn(column.id, editingColumnName);
+        }
     };
 
     return (
         <div
             ref={setNodeRef}
             style={style}
-            className="bg-columnBackgroundColor w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col " >
+            {...attributes}
+            {...listeners}
+            onDragOver={handleDragOver}
+            className="bg-columnBackgroundColor w-[350px] h-[500px] max-h-[500px] rounded-md flex flex-col"
+        >
             {/* Column title */}
             <div
                 {...attributes}
                 {...listeners}
                 onClick={() => {
                     setEditMode(true);
+                    setEditingColumnId(column.id);
                 }}
                 className="bg-mainBackgroundColor text-md h-[60px] cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between">
                 <div className="flex gap-2">
                     {!editMode && column.name}
                     {editMode && (
                         <input
-                            className="bg-black focus:border-rose-500 border rounded outline-none px-2"
-                            value={column.name}
-                            onChange={(e) =>
-                                updateColumn(column.id, e.target.value)
-                            }
-                            autoFocus
-                            onBlur={() => {
-                                setEditMode(false);
-                            }}
+                            className="bg-transparent focus:outline-none w-full"
+                            value={editingColumnName}
+                            onChange={(e) => setEditingColumnName(e.target.value)}
+                            onBlur={updateColumnName}
                             onKeyDown={(e) => {
-                                if (e.key !== "Enter") return;
-                                setEditMode(false);
+                                if (e.key === 'Enter') {
+                                    updateColumnName();
+                                }
                             }}
                         />
                     )}
