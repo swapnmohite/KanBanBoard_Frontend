@@ -1,16 +1,18 @@
 import React from "react";
+
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const baseurl = "https://kanbanboard-tagname.onrender.com";
   const navigate = useNavigate();
   const onSuccess = (credentialResponse) => {
     // console.log(credentialResponse);
     const idToken = credentialResponse.credential;
     let config = {
       method: "post",
-      url: `http://localhost:8080/google/auth?idToken=${idToken}`,
+      url: `${baseurl}/google/auth?idToken=${idToken}`,
       headers: {
         "Content-Type": "application/json",
       },
