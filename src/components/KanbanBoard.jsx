@@ -28,7 +28,7 @@ function KanbanBoard() {
         boards,
         columns,
         tasks,
-        isLoading,
+        // isLoading,
         fetchBoards,
         activeBoardId,
         fetchColumnsAndTasks,
@@ -143,7 +143,7 @@ function KanbanBoard() {
     return (
         <div className="flex">
             {/* Sidebar */}
-            <div className="w-64 p-4 py-28 shadow-lg">
+            <div className="w-64 p-4 shadow-lg">
                 <h1 className="text-2xl font-bold mb-4">Boards</h1>
                 {boards && boards.map((board) => (
                     <div
@@ -216,7 +216,7 @@ function KanbanBoard() {
 
             {/* Main content */}
             <div className="flex-grow p-4 overflow-auto">
-                <div className="m-auto flex min-h-screen w-full items-center overflow-x-auto overflow-y-hidden px-[0px]">
+                <div className=" flex  w-full items-center overflow-x-auto overflow-y-hidden px-[0px]">
                     <DndContext
                         sensors={sensors}
                         onDragStart={onDragStart}

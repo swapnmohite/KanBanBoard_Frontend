@@ -31,8 +31,8 @@ function ColumnContainer({ column }) {
         transform,
         transition,
         isDragging,
-        over,
-        overId,
+        // over,
+        // overId,
     } = useSortable({
         id: column.id,
         data: {
@@ -78,8 +78,8 @@ function ColumnContainer({ column }) {
         >
             {/* Column title */}
             <div
-                {...attributes}
-                {...listeners}
+                // {...attributes}
+                // {...listeners}
                 onClick={() => {
                     setEditMode(true);
                     setEditingColumnId(column.id);

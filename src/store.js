@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import api from "./api";
 
 const useStore = create((set, get) => ({
@@ -50,8 +50,10 @@ const useStore = create((set, get) => ({
             columns: [...state.columns, response.data],
         }));
     },
-    updateColumn: async (columnId, updatedData) => {
-        const response = await api.put(`/api/column/${columnId}`, updatedData);
+    updateColumn: async (columnId, newName) => {
+        const response = await api.put(`/api/column/${columnId}`, {
+            name: newName,
+        });
         set((state) => ({
             columns: state.columns.map((col) =>
                 col.id === columnId ? response.data : col

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const navigate = useNavigate();
   const onSuccess = (credentialResponse) => {
-    console.log(credentialResponse);
+    // console.log(credentialResponse);
     const idToken = credentialResponse.credential;
     let config = {
       method: "post",
@@ -20,7 +20,7 @@ const Dashboard = () => {
       .request(config)
       .then((response) => {
         const token = response.data;
-        console.log("Received JWT token:", token);
+        // console.log("Received JWT token:", token);
         localStorage.setItem("jwtToken", token);
         navigate("/home");
       })
