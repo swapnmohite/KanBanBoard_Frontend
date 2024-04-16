@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://kanbanboard-tagname.onrender.com",
+    baseURL: "http://13.233.161.217:8080",
 });
 
 api.interceptors.request.use(
