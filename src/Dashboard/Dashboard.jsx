@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const baseurl = "http://13.233.161.217:8080";
+  const baseurl = "https://13.233.161.217:8080";
   const navigate = useNavigate();
   const onSuccess = (credentialResponse) => {
     // console.log(credentialResponse);
