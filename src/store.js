@@ -7,6 +7,9 @@ const useStore = create((set, get) => ({
     tasks: [],
     activeBoardId: null,
     isLoading: false,
+    updatedColumnId: null,
+    taskAdded: false,
+    lastUpdatedTaskId: null,
 
     fetchBoards: async () => {
         set({ isLoading: true });
@@ -51,13 +54,14 @@ const useStore = create((set, get) => ({
         }));
     },
     updateColumn: async (columnId, newName) => {
-        const response = await api.put(`/api/column/${columnId}`, {
+        await api.put(`/api/column/${columnId}`, {
             name: newName,
         });
         set((state) => ({
             columns: state.columns.map((col) =>
-                col.id === columnId ? response.data : col
+                col.id === columnId ? { ...col, name: newName } : col
             ),
+            updatedColumnId: columnId,
         }));
     },
 
@@ -71,13 +75,14 @@ const useStore = create((set, get) => ({
 
     // Task actions
     createTask: async (columnId, description) => {
-        const response = await api.post(`/api/tasks/${columnId}`, {
-            description,
-        });
+        await api.post(`/api/tasks/${columnId}`, { description });
         set((state) => ({
-            tasks: [...state.tasks, response.data],
+            tasks: [...state.tasks, { columnId, description }], // Assuming you don't need the full task object from the API response
+            taskAdded: true, // Set taskAdded to true
         }));
     },
+
+    resetTaskAdded: () => set({ taskAdded: false }),
 
     updateTask: async (columnId, taskId, updatedData) => {
         const response = await api.put(

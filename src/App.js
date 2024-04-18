@@ -1,18 +1,26 @@
 import React from "react";
-// import "./App.css";
-import Home from "./Dashboard/Home.jsx"; // Assuming Home component is in the same directory
-import Dashboard from "./Dashboard/Dashboard.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Dashboard/Home.jsx";
+import Dashboard from "./Dashboard/Dashboard.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
-  );
+    const isAuthenticated = localStorage.getItem("jwtToken") !== null;
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <Home />
+                        </ProtectedRoute>
+                    }
+                />
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;

@@ -1,6 +1,6 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import useStore from '../store';
 import TrashIcon from "../icons/TrashIcon";
 import PlusIcon from "../icons/PlusIcon";
@@ -13,7 +13,7 @@ function ColumnContainer({ column }) {
     const [newTaskDescription, setNewTaskDescription] = useState('');
     const [showNewTaskInput, setShowNewTaskInput] = useState(false);
 
-    const { tasks, createTask, updateColumn, deleteColumn } = useStore();
+    const { tasks, createTask, updateColumn, deleteColumn, updatedColumnId, taskAdded, resetTaskAdded } = useStore();
     const [isHovered, setIsHovered] = useState(false);
     const [editingColumnId, setEditingColumnId] = useState(null);
     const [editingColumnName, setEditingColumnName] = useState(column.name);
@@ -67,6 +67,13 @@ function ColumnContainer({ column }) {
         }
     };
 
+    useEffect(() => {
+        if (taskAdded) {
+            resetTaskAdded(); // Reset taskAdded after re-render
+        }
+
+    }, [updatedColumnId, taskAdded, resetTaskAdded]);
+
     return (
         <div
             ref={setNodeRef}
@@ -83,11 +90,12 @@ function ColumnContainer({ column }) {
                 onClick={() => {
                     setEditMode(true);
                     setEditingColumnId(column.id);
+                    setEditingColumnName(column.name);
                 }}
                 className="bg-mainBackgroundColor text-md h-[60px] cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between">
                 <div className="flex gap-2">
                     {!editMode && column.name}
-                    {editMode && (
+                    {editMode && editingColumnId === column.id && (
                         <input
                             className="bg-transparent focus:outline-none w-full"
                             value={editingColumnName}
